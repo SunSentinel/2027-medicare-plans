@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2027 South Florida Prescription Drug Plans</title>
+    
+    <!-- Pym.js Resizer for iFrame Embeds -->
+    <script src="https://pym.nprapps.org/pym.v1.min.js"></script>
+
+    <style>
+        :root {
+            /* Blue accent colors for navigation */
+            --accent: #0056b3;
+            --accent-hover: #003d82;
+        }
+
+        /* --- Datawrapper-Inspired Newsroom Theme --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #333333;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 10px;
+            -webkit-overflow-scrolling: touch; 
+        }
+
+        .table-container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Journalistic Copy Header Styles */
+        .chart-header {
+            margin-bottom: 22px;
+        }
+
+        .chart-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111111;
+            margin: 0 0 6px 0;
+            line-height: 1.2;
+        }
+
+        .chart-intro {
+            font-size: 14px;
+            color: #555555;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Custom Dropdown Filters Toolbar */
+        .custom-filter-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ebeeec;
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            z-index: 1000;
+            padding-top: 10px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #555555;
+            font-weight: 600;
+        }
+
+        .filter-group select, .filter-group input {
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 13px;
+            background-color: #ffffff;
+            color: #333333;
+            outline: none;
+            transition: border-color 0.15s ease-in-out;
+        }
+
+        .filter-group input {
+            width: 200px;
+        }
+
+        .filter-group select:focus, .filter-group input:focus {
+            border-color: #888888;
+        }
+
+        /* Card Layout */
+        #plan-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        @media (min-width: 768px) {
+            #plan-container {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+        }
+
+        .card {
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            padding: 15px;
+            background-color: #ffffff;
+            transition: background-color 0.15s;
+        }
+
+        .card:hover {
+            background-color: #f7f7f7;
+        }
+
+        .card-header {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #ebeeec;
+        }
+
+        .company-name {
+            font-size: 11px;
+            color: #666666;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+        }
+
+        .plan-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0;
+            color: var(--accent);
+            line-height: 1.3;
+        }
+
+        .key-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #555555;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .stat-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #111111;
+        }
+
+        /* Expandable Details */
+        .details-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #cccccc;
+        }
+
+        .details-content.active {
+            display: block;
+        }
+
+        .details-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 13.5px;
+        }
+
+        .details-list li {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ebeeec;
+        }
+
+        .details-list li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .details-list strong {
+            display: block;
+            color: #555555;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 2px;
+            line-height: 1.3;
+        }
+
+        .toggle-btn {
+            width: 100%;
+            padding: 8px 12px;
+            background-color: var(--accent);
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .toggle-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .card-footer {
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .card-footer a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .card-footer a:hover {
+            text-decoration: underline;
+            color: var(--accent-hover);
+        }
+
+        /* Source Footnote Styles */
+        .chart-footer {
+            margin-top: 20px;
+            padding-top: 12px;
+            border-top: 1px solid #ebeeec;
+        }
+
+        .chart-source {
+            font-size: 11px;
+            color: #666666;
+            letter-spacing: 0.02em;
+            margin: 0;
+        }
+
+        /* Accessibility Focus */
+        button:focus-visible, 
+        select:focus-visible, 
+        input:focus-visible, 
+        a:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Mobile Breakpoints */
+        @media (max-width: 640px) {
+            .custom-filter-toolbar {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .filter-group {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .filter-group select, .filter-group input {
+                width: 65%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="table-container">
+    <header class="chart-header">
+        <h1 class="chart-title">2027 prescription drug plans</h1>
+        <p class="chart-intro">Search and filter standalone Medicare Part D prescription drug plans to compare premiums, deductibles, and pharmacy costs.</p>
+    </header>
+
+    <div class="custom-filter-toolbar">
+        <div class="filter-group">
+            <label for="search">Search:</label>
+            <input type="text" id="search" placeholder="e.g., AARP, Humana...">
+        </div>
+        <div class="filter-group">
+            <label for="filter-premium">Premium:</label>
+            <select id="filter-premium">
+                <option value="all">All Premiums</option>
+                <option value="50">Under $50 / month</option>
+                <option value="100">Under $100 / month</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="filter-stars">Rating:</label>
+            <select id="filter-stars">
+                <option value="all">All Ratings</option>
+                <option value="3">3 Stars & Above</option>
+                <option value="4">4 Stars & Above</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="plan-container"></div>
+
+    <footer class="chart-footer">
+        <p class="chart-source">SOURCE: Medicare.gov and health plan providers.</p>
+    </footer>
+</div>
+
+<script>
+    const pymChild = new pym.Child({ polling: 500 });
+
+    // The cleaned CSV data baked directly into the Javascript for standalone performance.
+    const allPlans = [
+      {
+        "Parsed Name": "AARP Medicare Rx Preferred",
+        "Parsed ID": "S5921-383",
+        "Parsed Company": "UnitedHealthcare",
+        "Parsed Phone": "855-284-7089",
+        "Parsed Website": "aarpmedicareplans.com",
+        "Company and plan name": "AARP Medicare Rx Preferred (S5921-383) Offered by UnitedHealthcare.  855-284-7089, aarpmedicareplans.com",
+        "2027 monthly premium": "$184.10",
+        "2026 monthly premium": "$119.10",
+        "2027 annual premium": "$2,209.20",
+        "Annual deductible": "$0 for tiers 1 and 2, $300 for tiers 3-5",
+        "Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)": "PREFERRED PHARMACIES: $0 for preferred generics, $5 for other generics; 22 percent for preferred brands, 30 percent for non-preferred drugs; 30 percent for specialty drugs. STANDARD PHARMACIES: $5 for preferred generics, $10 for other generics; 22 percent for preferred brands, 30 percent for non-preferred drugs; 30 percent for specialty drugs.",
+        "There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get \"catastrophic coverage\" and won't have to pay out-of-pocket for the rest of the year. ": "After your total out-of-pocket costs reach $2,400 you will pay $0 for covered medications for the remainder of the plan year.",
+        "2027 Medicare Part D rating (Summary rating of drug plan quality}": "3.0"
+      },
+      {
+        "Parsed Name": "AARP Medicare Rx Saver",
+        "Parsed ID": "S5921-356",
+        "Parsed Company": "UnitedHealthcare",
+        "Parsed Phone": "855-284-7089",
+        "Parsed Website": "aarpmedicareplans.com",
+        "Company and plan name": "AARP Medicare Rx Saver (S5921-356) Offered by UnitedHealthcare.  855-284-7089, aarpmedicareplans.com",
+        "2027 monthly premium": "$149.20",
+        "2026 monthly premium": "$98.70",
+        "2027 annual premium": "$1,790.40",
+        "Annual deductible": "$700",
+        "Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)": "PREFERRED PHARMACIES: $0 for preferred generics, $5 for other generics; 21 percent for preferred brands, 33 percent for non-preferred drugs; 25 percent for specialty drugs. STANDARD PHARMACIES: $5 for preferred generics, $10 for other generics; 21 percent for preferred brands, 33 percent for non-preferred drugs; 25 percent for specialty drugs.",
+        "There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get \"catastrophic coverage\" and won't have to pay out-of-pocket for the rest of the year. ": "After your total out-of-pocket costs reach $2,400 you will pay $0 for covered medications for the remainder of the plan year.",
+        "2027 Medicare Part D rating (Summary rating of drug plan quality}": "3.0"
+      },
+      {
+        "Parsed Name": "BlueMedicare Complete Rx",
+        "Parsed ID": "S5904-002",
+        "Parsed Company": "Part D Plan",
+        "Parsed Phone": "855-601-9465",
+        "Parsed Website": "floridablue.com/medicare",
+        "Company and plan name": "BlueMedicare Complete Rx (S5904-002). 855-601-9465, floridablue.com/medicare",
+        "2027 monthly premium": "$326.00",
+        "2026 monthly premium": "$217.00",
+        "2027 annual premium": "$3,912.00",
+        "Annual deductible": "$700",
+        "Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)": "STANDARD PHARMACIES: $0 for preferred generics, $2 for other generics; 19 percent for preferred brands, 26 percent for non-preferred drugs; 25 percent for specialty drugs. NO PREFERRED PHARMACY PRICING",
+        "There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get \"catastrophic coverage\" and won't have to pay out-of-pocket for the rest of the year. ": "After your total out-of-pocket costs reach $2,400 you will pay $0 for covered medications for the remainder of the plan year.",
+        "2027 Medicare Part D rating (Summary rating of drug plan quality}": "2.5"
+      },
+      {
+        "Parsed Name": "BlueMedicare Premier Rx",
+        "Parsed ID": "S5904-001",
+        "Parsed Company": "Part D Plan",
+        "Parsed Phone": "855-601-9465",
+        "Parsed Website": "floridablue.com/medicare",
+        "Company and plan name": "BlueMedicare Premier Rx (S5904-001). 855-601-9465, floridablue.com/medicare",
+        "2027 monthly premium": "$164.60",
+        "2026 monthly premium": "$98.60",
+        "2027 annual premium": "$1,975.20",
+        "Annual deductible": "$700 (excludes tier 6)",
+        "Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)": "STANDARD PHARMACIES: $4 for preferred generics, $8 for other generics; 19 percent for preferred brands, 32 percent for non-preferred drugs; 25 percent for specialty drugs; $4 select care drugs. NO PREFERRED PHARMACY PRICING",
+        "There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get \"catastrophic coverage\" and won't have to pay out-of-pocket for the rest of the year. ": "After your total out-of-pocket costs reach $2,400 you will pay $0 for covered medications for the remainder of the plan year.",
+        "2027 Medicare Part D rating (Summary rating of drug plan quality}": "2.5"
+      },
+      {
+        "Parsed Name": "HealthSpring Assurance RX",
+        "Parsed ID": "S5715-032",
+        "Parsed Company": "Part D Plan",
+        "Parsed Phone": "877-534-0199",
+        "Parsed Website": "healthspringmedicare.com",
+        "Company and plan name": "HealthSpring Assurance RX (S5715-032). 877-534-0199, healthspringmedicare.com",
+        "2027 monthly premium": "$9.30",
+        "2026 monthly premium": "N/A",
+        "2027 annual premium": "$111.60",
+        "Annual deductible": "$700",
+        "Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)": "PREFERRED PHARMACIES: 5 percent for preferred generics,10 percent for other generics; 25 percent for preferred brands, 31 percent for non-preferred drugs; 25 percent for specialty drugs. STANDARD PHARMACIES: 10 percent for preferred generics,15 percent for other generics; 25 percent for preferred brands, 32 percent for non-preferred drugs; 25 percent for specialty drugs.",
+        "There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get \"catastrophic coverage\" and won't have to pay out-of-pocket for the rest of the year. ": "After your total out-of-pocket costs reach $2,400 you will pay $0 for covered medications for the remainder of the plan year.",
+        "2027 Medicare Part D rating (Summary rating of drug plan quality}": "2.5"
+      },
+      {
+        "Parsed Name": "Humana Basic Rx",
+        "Parsed ID": "S5884-105",
+        "Parsed Company": "Part D Plan",
+        "Parsed Phone": "877-529-9871",
+        "Parsed Website": "humana.com/medicare",
+        "Company and plan name": "Humana Basic Rx (S5884-105). 877-529-9871, humana.com/medicare",
+        "2027 monthly premium": "$90.30",
+        "2026 monthly premium": "$92.70",
+        "2027 annual premium": "$1,083.60",
+        "Annual deductible": "$700",
+        "Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)": "STANDARD PHARMACIES: $0 for preferred generics, $1 for other generics; 25 percent for preferred brands, 36 percent for non-preferred drugs; 25 percent for specialty drugs. NO PREFERRED PHARMACY PRICING",
+        "There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get \"catastrophic coverage\" and won't have to pay out-of-pocket for the rest of the year. ": "After your total out-of-pocket costs reach $2,400 you will pay $0 for covered medications for the remainder of the plan year.",
+        "2027 Medicare Part D rating (Summary rating of drug plan quality}": "4.5"
+      },
+      {
+        "Parsed Name": "Humana Premier Rx",
+        "Parsed ID": "S5884-157",
+        "Parsed Company": "Part D Plan",
+        "Parsed Phone": "877-529-9871",
+        "Parsed Website": "humana.com/medicare",
+        "Company and plan name": "Humana Premier Rx (S5884-157). 877-529-9871, humana.com/medicare",
+        "2027 monthly premium": "$135.20",
+        "2026 monthly premium": "$115.90",
+        "2027 annual premium": "$1,622.40",
+        "Annual deductible": "$0 tiers 1-3, $350 tiers 4-5",
+        "Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)": "PREFERRED PHARMACIES: $0 for preferred generics, $4 for other generics; 16 percent for preferred brands, 50 percent for non-preferred drugs; 29 percent for specialty drugs. STANDARD PHARMACIES: $5 for preferred generics, $10 for other generics; 16 percent for preferred brands, 50 percent for non-preferred drugs; 29 percent for specialty drugs.",
+        "There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get \"catastrophic coverage\" and won't have to pay out-of-pocket for the rest of the year. ": "After your total out-of-pocket costs reach $2,400 you will pay $0 for covered medications for the remainder of the plan year.",
+        "2027 Medicare Part D rating (Summary rating of drug plan quality}": "4.5"
+      },
+      {
+        "Parsed Name": "Humana Value Rx",
+        "Parsed ID": "S5884-190",
+        "Parsed Company": "Part D Plan",
+        "Parsed Phone": "877-529-9871",
+        "Parsed Website": "humana.com/medicare",
+        "Company and plan name": "Humana Value Rx (S5884-190). 877-529-9871, humana.com/medicare",
+        "2027 monthly premium": "$45.20",
+        "2026 monthly premium": "$25.90",
+        "2027 annual premium": "$542.40",
+        "Annual deductible": "$0 tiers 1 and 2, $687 tiers 3-5",
+        "Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)": "PREFERRED PHARMACIES: $0 for preferred generics, $0 for other generics; 20 percent for preferred brands, 30 percent for non-preferred drugs; 26 percent for specialty drugs. STANDARD PHARMACIES: $1 for preferred generics, $4 for other generics; 20 percent for preferred brands, 30 percent for non-preferred drugs; 26 percent for specialty drugs.",
+        "There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get \"catastrophic coverage\" and won't have to pay out-of-pocket for the rest of the year. ": "After your total out-of-pocket costs reach $2,400 you will pay $0 for covered medications for the remainder of the plan year.",
+        "2027 Medicare Part D rating (Summary rating of drug plan quality}": "4.5"
+      },
+      {
+        "Parsed Name": "SilverScript Choice",
+        "Parsed ID": "S5601-022",
+        "Parsed Company": "Aetna Medicare",
+        "Parsed Phone": "844-509-6254",
+        "Parsed Website": "aetna.com/medicare",
+        "Company and plan name": "SilverScript Choice (S5601-022) Offered by Aetna Medicare. 844-509-6254, aetna.com/medicare",
+        "2027 monthly premium": "$126.00",
+        "2026 monthly premium": "$98.30",
+        "2027 annual premium": "$1,512.00",
+        "Annual deductible": "$700",
+        "Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)": "STANDARD PHARMACIES: $0 for preferred generics, $7 for other generics; 23 percent for preferred brands, 34 percent for non-preferred drugs; 25 percent for specialty drugs. NO PREFERRED PHARMACY PRICING",
+        "There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get \"catastrophic coverage\" and won't have to pay out-of-pocket for the rest of the year. ": "After your total out-of-pocket costs reach $2,400 you will pay $0 for covered medications for the remainder of the plan year.",
+        "2027 Medicare Part D rating (Summary rating of drug plan quality}": "2.5"
+      },
+      {
+        "Parsed Name": "WellCare Classic",
+        "Parsed ID": "S4802-083",
+        "Parsed Company": "Part D Plan",
+        "Parsed Phone": "844-480-0700",
+        "Parsed Website": "wellcare.com/pdp",
+        "Company and plan name": "WellCare Classic (S4802-083). 844-480-0700, wellcare.com/pdp",
+        "2027 monthly premium": "$7.30",
+        "2026 monthly premium": "$0.00",
+        "2027 annual premium": "$87.60",
+        "Annual deductible": "$700",
+        "Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)": "PREFERRED PHARMACIES: $3 for generics; 25 percent for preferred brands, 33 percent for non-preferred drugs; 25 percent for specialty drugs. STANDARD PHARMACIES: $20 for generics; $25 percent for preferred brands, 35 percent for non-preferred drugs; 25 percent for specialty drugs.",
+        "There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get \"catastrophic coverage\" and won't have to pay out-of-pocket for the rest of the year. ": "After your total out-of-pocket costs reach $2,400 you will pay $0 for covered medications for the remainder of the plan year.",
+        "2027 Medicare Part D rating (Summary rating of drug plan quality}": "3.0"
+      },
+      {
+        "Parsed Name": "WellCare Value Script",
+        "Parsed ID": "S4802-146",
+        "Parsed Company": "Part D Plan",
+        "Parsed Phone": "844-480-0700",
+        "Parsed Website": "wellcare.com/pdp",
+        "Company and plan name": "WellCare Value Script (S4802-146). 844-480-0700, wellcare.com/pdp",
+        "2027 monthly premium": "$5.30",
+        "2026 monthly premium": "$0.00",
+        "2027 annual premium": "$63.60",
+        "Annual deductible": "$0 tier 1, $700 on tiers 2-5",
+        "Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)": "PREFERRED PHARMACIES: $0 for generics; 25 percent for preferred brands, 45 percent for non-preferred drugs; 25 percent for specialty drugs; $11 select care drugs. STANDARD PHARMACIES: $20 for generics; $25 percent for preferred brands, 45 percent for non-preferred drugs; 25 percent for specialty drugs; $11 select care drugs.",
+        "There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get \"catastrophic coverage\" and won't have to pay out-of-pocket for the rest of the year. ": "After your total out-of-pocket costs reach $2,400 you will pay $0 for covered medications for the remainder of the plan year.",
+        "2027 Medicare Part D rating (Summary rating of drug plan quality}": "3.0"
+      }
+    ];
+
+    function renderPlans(plans) {
+        const container = document.getElementById('plan-container');
+        container.innerHTML = '';
+
+        if (plans.length === 0) {
+            container.innerHTML = '<p style="font-size: 14px; color: #555555;">No plans match your selected filters. Try adjusting your search.</p>';
+            pymChild.sendHeight();
+            return;
+        }
+
+        plans.forEach((plan, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <p class="company-name">${plan['Parsed Company']}</p>
+                    <h2 class="plan-name">${plan['Parsed Name']} (${plan['Parsed ID']})</h2>
+                </div>
+                
+                <div class="key-stats">
+                    <div class="stat">
+                        <span class="stat-label">2027 Monthly Premium</span>
+                        <span class="stat-value">${plan['2027 monthly premium']}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Star Rating</span>
+                        <span class="stat-value">⭐ ${plan['2027 Medicare Part D rating (Summary rating of drug plan quality}']}</span>
+                    </div>
+                </div>
+
+                <button class="toggle-btn" onclick="toggleDetails('details-${index}')">View details</button>
+
+                <div id="details-${index}" class="details-content">
+                    <ul class="details-list">
+                        <li><strong>Company and plan name</strong> ${plan['Company and plan name']}</li>
+                        <li><strong>2026 monthly premium</strong> ${plan['2026 monthly premium']}</li>
+                        <li><strong>2027 annual premium</strong> ${plan['2027 annual premium']}</li>
+                        <li><strong>Annual deductible</strong> ${plan['Annual deductible']}</li>
+                        <li><strong>Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)</strong> ${plan['Your drug co-payments, after deductibles, from $0 to $2,400 of total drug costs  (initial coverage phase)']}</li>
+                        <li><strong>There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get "catastrophic coverage" and won't have to pay out-of-pocket for the rest of the year.</strong> ${plan['There will be a $2,400 cap on out-of-pocket spending for covered Part D drugs. Once this amount is reached, the patient will automatically get "catastrophic coverage" and won\'t have to pay out-of-pocket for the rest of the year. ']}</li>
+                    </ul>
+                    <div class="card-footer">
+                        <a href="https://${plan['Parsed Website']}" target="_blank" rel="noopener noreferrer">Visit Plan Website &rarr;</a>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        pymChild.sendHeight();
+    }
+
+    window.toggleDetails = function(id) {
+        const details = document.getElementById(id);
+        details.classList.toggle('active');
+        pymChild.sendHeight();
+    }
+
+    function applyFilters() {
+        const searchTerm = document.getElementById('search').value.toLowerCase();
+        const premiumFilter = document.getElementById('filter-premium').value;
+        const starFilter = document.getElementById('filter-stars').value;
+
+        const filteredPlans = allPlans.filter(plan => {
+            
+            // 1. Search Logic
+            const matchesSearch = plan['Parsed Name'].toLowerCase().includes(searchTerm) || 
+                                  plan['Company and plan name'].toLowerCase().includes(searchTerm);
+            
+            // 2. Premium Logic
+            let matchesPremium = true;
+            if (premiumFilter !== 'all') {
+                // Remove the dollar sign and parse as float
+                const premiumValue = parseFloat(plan['2027 monthly premium'].replace('$', ''));
+                const filterThreshold = parseFloat(premiumFilter);
+                matchesPremium = !isNaN(premiumValue) && premiumValue <= filterThreshold;
+            }
+
+            // 3. Star Rating Logic
+            let matchesStars = true;
+            if (starFilter !== 'all') {
+                const rating = parseFloat(plan['2027 Medicare Part D rating (Summary rating of drug plan quality}']);
+                const filterStars = parseFloat(starFilter);
+                matchesStars = !isNaN(rating) && rating >= filterStars;
+            }
+
+            return matchesSearch && matchesPremium && matchesStars;
+        });
+
+        renderPlans(filteredPlans);
+    }
+
+    // Attach event listeners
+    document.getElementById('search').addEventListener('input', applyFilters);
+    document.getElementById('filter-premium').addEventListener('change', applyFilters);
+    document.getElementById('filter-stars').addEventListener('change', applyFilters);
+
+    // Initial render
+    renderPlans(allPlans);
+</script>
+</body>
+</html>
