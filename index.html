@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2027 Medicare Advantage Plans</title>
+    <!-- Include Pym.js for iframe resizing -->
+    <script src="https://pym.nprapps.org/pym.v1.min.js"></script>
+    <style>
+        :root {
+            --text-main: #111111;
+            --text-muted: #444444;
+            --bg-page: #f9f9f9;
+            --bg-card: #ffffff;
+            --border: #cccccc;
+            --accent: #0056b3;
+            --accent-hover: #003d82;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 16px; /* High accessibility standard */
+            line-height: 1.5;
+            color: var(--text-main);
+            background-color: var(--bg-page);
+            margin: 0;
+            padding: 1rem;
+        }
+
+        /* Filter Section */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 200px;
+        }
+
+        .control-group label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .control-group select, .control-group input {
+            padding: 0.75rem;
+            font-size: 16px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        /* Accessibility Focus States */
+        button:focus-visible, 
+        select:focus-visible, 
+        input:focus-visible, 
+        a:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        /* Card Layout */
+        #plan-container {
+            display: grid;
+            grid-template-columns: 1fr; /* Mobile First: 1 column */
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            #plan-container {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Desktop: Multi-column */
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .card-header {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--bg-page);
+        }
+
+        .plan-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin: 0 0 0.5rem 0;
+            color: var(--accent);
+        }
+
+        .company-name {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .key-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat {
+            background: var(--bg-page);
+            padding: 0.75rem;
+            border-radius: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        /* Expandable Details */
+        .details-content {
+            display: none; /* Hidden by default */
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .details-content.active {
+            display: block;
+        }
+
+        .details-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .details-list li {
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .details-list li:last-child {
+            border-bottom: none;
+        }
+
+        .details-list strong {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .toggle-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .card-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .card-footer a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <div class="control-group">
+            <label for="search">Search Plans</label>
+            <input type="text" id="search" placeholder="e.g., Aetna, CarePlus...">
+        </div>
+        <div class="control-group">
+            <label for="filter-county">County</label>
+            <select id="filter-county">
+                <option value="all">All Counties</option>
+                <option value="Broward">Broward</option>
+                <option value="Palm Beach">Palm Beach</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="filter-type">Plan Type</label>
+            <select id="filter-type">
+                <option value="all">All Plan Types</option>
+                <option value="standard">Standard Plans (No SNP)</option>
+                <option value="d-snp">Dual-Eligible (D-SNP)</option>
+                <option value="c-snp">Chronic Condition (C-SNP)</option>
+                <option value="i-snp">Institutional (I-SNP)</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="filter-stars">Star Rating</label>
+            <select id="filter-stars">
+                <option value="all">All Ratings</option>
+                <option value="4">4 Stars & Above</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="filter-drugs">Drug Coverage</label>
+            <select id="filter-drugs">
+                <option value="all">All Plans</option>
+                <option value="included">Includes Part D (Drugs)</option>
+                <option value="none">No Drug Coverage</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="plan-container">
+        <!-- Cards will be injected here by JavaScript -->
+    </div>
+
+    <script>
+        // Initialize Pym.js
+        const pymChild = new pym.Child({ polling: 500 });
+        let allPlans = [];
+
+        // Fetch the cleaned data
+        fetch('medicare_cleaned.json')
+            .then(response => response.json())
+            .then(data => {
+                allPlans = data;
+                renderPlans(allPlans);
+            })
+            .catch(error => console.error("Error loading JSON:", error));
+
+        function renderPlans(plans) {
+            const container = document.getElementById('plan-container');
+            container.innerHTML = ''; // Clear container
+
+            if (plans.length === 0) {
+                container.innerHTML = '<p>No plans match your selected filters. Try adjusting your search.</p>';
+                pymChild.sendHeight();
+                return;
+            }
+
+            plans.forEach((plan, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                // Construct the HTML for each card
+                card.innerHTML = `
+                    <div class="card-header">
+                        <p class="company-name">${plan.Companies}</p>
+                        <h2 class="plan-name">${plan.Name}</h2>
+                    </div>
+                    
+                    <div class="key-stats">
+                        <div class="stat">
+                            <span class="stat-label">Monthly Premium</span>
+                            <span class="stat-value">${plan['Monthly premium'].split('.')[0]}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Star Rating</span>
+                            <span class="stat-value">⭐ ${plan['Star rating']}</span>
+                        </div>
+                    </div>
+
+                    <button class="toggle-btn" onclick="toggleDetails('details-${index}')">View Full Costs & Details</button>
+
+                    <div id="details-${index}" class="details-content">
+                        <ul class="details-list">
+                            <li><strong>Primary Doctor Copay</strong> ${plan.primary_doctor}</li>
+                            <li><strong>Specialist Copay</strong> ${plan.specialist}</li>
+                            <li><strong>Max Out-of-Pocket</strong> ${plan.max_out_of_pocket}</li>
+                            <li><strong>Hospital Stay</strong> ${plan.inpatient_hospital}</li>
+                            <li><strong>Dental Coverage</strong> ${plan.dental_coverage}</li>
+                            <li><strong>Drug Deductible</strong> ${plan.drug_deductible}</li>
+                            <li><strong>Preferred Pharmacies</strong> ${plan.preferred_pharmacies}</li>
+                        </ul>
+                        <div class="card-footer">
+                            <a href="https://${plan.Website}" target="_blank" rel="noopener noreferrer">Visit Plan Website &rarr;</a>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Force Pym to recalculate height after rendering new cards
+            pymChild.sendHeight();
+        }
+
+        // Toggle Expand/Collapse
+        window.toggleDetails = function(id) {
+            const details = document.getElementById(id);
+            details.classList.toggle('active');
+            
+            // CRITICAL: Tell the parent CMS iframe to resize whenever a card expands
+            pymChild.sendHeight();
+        }
+
+        // Unified Filtering Logic
+        function applyFilters() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const countyFilter = document.getElementById('filter-county').value;
+            const typeFilter = document.getElementById('filter-type').value;
+            const starFilter = document.getElementById('filter-stars').value;
+            const drugFilter = document.getElementById('filter-drugs').value;
+
+            const filteredPlans = allPlans.filter(plan => {
+                
+                // 1. Search Term
+                const matchesSearch = plan.Name.toLowerCase().includes(searchTerm) || 
+                                      plan.Companies.toLowerCase().includes(searchTerm);
+                
+                // 2. County
+                let matchesCounty = true;
+                if (countyFilter !== 'all') {
+                    matchesCounty = plan.Name.includes(countyFilter);
+                }
+
+                // 3. Plan Type
+                let matchesType = true;
+                if (typeFilter === 'd-snp') matchesType = plan.Name.includes('D-SNP');
+                else if (typeFilter === 'c-snp') matchesType = plan.Name.includes('C-SNP');
+                else if (typeFilter === 'i-snp') matchesType = plan.Name.includes('I-SNP');
+                else if (typeFilter === 'standard') matchesType = !plan.Name.includes('SNP'); 
+
+                // 4. Star Ratings (Converting strings like "4.5" to numbers)
+                let matchesStars = true;
+                if (starFilter === '4') {
+                    const rating = parseFloat(plan['Star rating']);
+                    matchesStars = !isNaN(rating) && rating >= 4;
+                }
+
+                // 5. Drug Coverage (Checking our extracted data for the exclusion phrase)
+                let matchesDrugs = true;
+                const noDrugs = plan.drug_deductible === "No Part D drug coverage" || plan.drug_deductible === "Drugs covered separately";
+                
+                if (drugFilter === 'included') {
+                    matchesDrugs = !noDrugs;
+                } else if (drugFilter === 'none') {
+                    matchesDrugs = noDrugs;
+                }
+
+                return matchesSearch && matchesCounty && matchesType && matchesStars && matchesDrugs;
+            });
+
+            renderPlans(filteredPlans);
+        }
+
+        // Attach event listeners to all dropdowns and inputs
+        document.getElementById('search').addEventListener('input', applyFilters);
+        document.getElementById('filter-county').addEventListener('change', applyFilters);
+        document.getElementById('filter-type').addEventListener('change', applyFilters);
+        document.getElementById('filter-stars').addEventListener('change', applyFilters);
+        document.getElementById('filter-drugs').addEventListener('change', applyFilters);
+    </script>
+</body>
+</html>
