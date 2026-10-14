@@ -139,7 +139,7 @@
             font-size: 16px;
             font-weight: 700;
             margin: 0;
-            color: var(--accent); /* Restored Blue Accent */
+            color: var(--accent);
             line-height: 1.3;
         }
 
@@ -208,7 +208,7 @@
         .toggle-btn {
             width: 100%;
             padding: 8px 12px;
-            background-color: var(--accent); /* Restored Blue Accent */
+            background-color: var(--accent);
             color: #ffffff;
             border: none;
             border-radius: 4px;
@@ -228,7 +228,7 @@
         }
 
         .card-footer a {
-            color: var(--accent); /* Restored Blue Accent */
+            color: var(--accent);
             text-decoration: none;
             font-size: 13px;
             font-weight: 600;
@@ -380,14 +380,23 @@
 
                 <div id="details-${index}" class="details-content">
                     <ul class="details-list">
-                        <li><strong>Primary Doctor Copay</strong> ${plan.primary_doctor}</li>
-                        <li><strong>Specialist Copay</strong> ${plan.specialist}</li>
-                        <li><strong>Max Out-of-Pocket</strong> ${plan.max_out_of_pocket}</li>
-                        <li><strong>Hospital Stay</strong> ${plan.inpatient_hospital}</li>
-                        <li><strong>Dental Coverage</strong> ${plan.dental_coverage}</li>
-                        <li><strong>Drug Deductible</strong> ${plan.drug_deductible}</li>
-                        <li><strong>Preferred Pharmacies</strong> ${plan.preferred_pharmacies}</li>
+                        <li><strong>Plan Number</strong> ${plan['Plan Number']}</li>
+                        <li><strong>Phone</strong> ${plan.Phone}</li>
+                        <li><strong>Part B only</strong> ${plan.part_b_only}</li>
+                        <li><strong>Annual medical deductible</strong> ${plan.medical_deductible}</li>
+                        <li><strong>Primary doctor</strong> ${plan.primary_doctor}</li>
+                        <li><strong>Specialist</strong> ${plan.specialist}</li>
+                        <li><strong>Maximum annual out-of-pocket costs</strong> ${plan.max_out_of_pocket}</li>
+                        <li><strong>Inpatient Hospital</strong> ${plan.inpatient_hospital}</li>
+                        <li><strong>Routine exams - Hearing</strong> ${plan.hearing_coverage}</li>
+                        <li><strong>Dental</strong> ${plan.dental_coverage}</li>
+                        <li><strong>Vision</strong> ${plan.vision_coverage}</li>
+                        <li><strong>Drug deductible</strong> ${plan.drug_deductible}</li>
+                        <li><strong>Preferred retail pharmacies</strong> ${plan.preferred_pharmacies}</li>
+                        <li><strong>Standard retail pharmacies</strong> ${plan.standard_pharmacies}</li>
+                        <li><strong>Co-pay after deductibles $2,400 and up</strong> ${plan.drug_coverage_catastrophic}</li>
                     </ul>
+                    <p style="font-size: 11px; color: #666; margin-top: 10px; font-style: italic;">* Limits may apply to routine exams, dental, and vision coverage.</p>
                     <div class="card-footer">
                         <a href="https://${plan.Website}" target="_blank" rel="noopener noreferrer">Visit Plan Website &rarr;</a>
                     </div>
