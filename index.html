@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2027 Medicare Advantage Plans</title>
-    <!-- Include Pym.js for iframe resizing -->
-    <script src="https://pym.nprapps.org/pym.v1.min.js"></script>
     <style>
         :root {
             --text-main: #111111;
@@ -17,44 +15,58 @@
             --accent-hover: #003d82;
         }
 
-        body {
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-page);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            font-size: 16px; /* High accessibility standard */
+            font-size: 16px;
             line-height: 1.5;
             color: var(--text-main);
-            background-color: var(--bg-page);
-            margin: 0;
+            /* Enables smooth momentum scrolling inside fixed WordPress iframes on mobile */
+            -webkit-overflow-scrolling: touch; 
+        }
+
+        body {
             padding: 1rem;
         }
 
-        /* Filter Section */
+        /* Sticky Control Bar for Fixed-Height Iframes */
         .controls {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             background: var(--bg-card);
-            padding: 1.5rem;
+            padding: 1.25rem;
             border: 1px solid var(--border);
             border-radius: 8px;
+            
+            /* Pin filters to top when scrolling inside iframe */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         }
 
         .control-group {
             display: flex;
             flex-direction: column;
-            flex: 1 1 200px;
+            flex: 1 1 180px;
         }
 
         .control-group label {
             font-weight: bold;
-            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
         }
 
         .control-group select, .control-group input {
-            padding: 0.75rem;
+            padding: 0.65rem;
             font-size: 16px;
             border: 1px solid var(--border);
             border-radius: 4px;
+            background: #fff;
         }
 
         /* Accessibility Focus States */
@@ -63,19 +75,19 @@
         input:focus-visible, 
         a:focus-visible {
             outline: 3px solid var(--accent);
-            outline-offset: 3px;
+            outline-offset: 2px;
         }
 
         /* Card Layout */
         #plan-container {
             display: grid;
-            grid-template-columns: 1fr; /* Mobile First: 1 column */
-            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
         }
 
         @media (min-width: 768px) {
             #plan-container {
-                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Desktop: Multi-column */
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             }
         }
 
@@ -83,25 +95,25 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 1.25rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
         }
 
         .card-header {
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
             border-bottom: 2px solid var(--bg-page);
         }
 
         .plan-name {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: bold;
-            margin: 0 0 0.5rem 0;
+            margin: 0 0 0.4rem 0;
             color: var(--accent);
         }
 
         .company-name {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--text-muted);
@@ -111,33 +123,33 @@
         .key-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            gap: 0.75rem;
             margin-bottom: 1rem;
         }
 
         .stat {
             background: var(--bg-page);
-            padding: 0.75rem;
+            padding: 0.6rem;
             border-radius: 4px;
         }
 
         .stat-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: bold;
             color: var(--text-muted);
             display: block;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.2rem;
         }
 
         .stat-value {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
         }
 
         /* Expandable Details */
         .details-content {
-            display: none; /* Hidden by default */
-            margin-top: 1.5rem;
+            display: none;
+            margin-top: 1rem;
             padding-top: 1rem;
             border-top: 1px solid var(--border);
         }
@@ -165,17 +177,17 @@
         .details-list strong {
             display: block;
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .toggle-btn {
             width: 100%;
-            padding: 1rem;
+            padding: 0.85rem;
             background: var(--accent);
             color: white;
             border: none;
             border-radius: 4px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: bold;
             cursor: pointer;
             transition: background 0.2s;
@@ -186,7 +198,7 @@
         }
 
         .card-footer {
-            margin-top: 1.5rem;
+            margin-top: 1.25rem;
             text-align: center;
         }
 
@@ -239,16 +251,11 @@
         </div>
     </div>
 
-    <div id="plan-container">
-        <!-- Cards will be injected here by JavaScript -->
-    </div>
+    <div id="plan-container"></div>
 
     <script>
-        // Initialize Pym.js
-        const pymChild = new pym.Child({ polling: 500 });
         let allPlans = [];
 
-        // Fetch the cleaned data
         fetch('medicare_cleaned.json')
             .then(response => response.json())
             .then(data => {
@@ -259,11 +266,10 @@
 
         function renderPlans(plans) {
             const container = document.getElementById('plan-container');
-            container.innerHTML = ''; // Clear container
+            container.innerHTML = '';
 
             if (plans.length === 0) {
                 container.innerHTML = '<p>No plans match your selected filters. Try adjusting your search.</p>';
-                pymChild.sendHeight();
                 return;
             }
 
@@ -271,7 +277,6 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 
-                // Construct the HTML for each card
                 card.innerHTML = `
                     <div class="card-header">
                         <p class="company-name">${plan.Companies}</p>
@@ -308,21 +313,13 @@
                 `;
                 container.appendChild(card);
             });
-
-            // Force Pym to recalculate height after rendering new cards
-            pymChild.sendHeight();
         }
 
-        // Toggle Expand/Collapse
         window.toggleDetails = function(id) {
             const details = document.getElementById(id);
             details.classList.toggle('active');
-            
-            // CRITICAL: Tell the parent CMS iframe to resize whenever a card expands
-            pymChild.sendHeight();
         }
 
-        // Unified Filtering Logic
         function applyFilters() {
             const searchTerm = document.getElementById('search').value.toLowerCase();
             const countyFilter = document.getElementById('filter-county').value;
@@ -331,32 +328,26 @@
             const drugFilter = document.getElementById('filter-drugs').value;
 
             const filteredPlans = allPlans.filter(plan => {
-                
-                // 1. Search Term
                 const matchesSearch = plan.Name.toLowerCase().includes(searchTerm) || 
                                       plan.Companies.toLowerCase().includes(searchTerm);
                 
-                // 2. County
                 let matchesCounty = true;
                 if (countyFilter !== 'all') {
                     matchesCounty = plan.Name.includes(countyFilter);
                 }
 
-                // 3. Plan Type
                 let matchesType = true;
                 if (typeFilter === 'd-snp') matchesType = plan.Name.includes('D-SNP');
                 else if (typeFilter === 'c-snp') matchesType = plan.Name.includes('C-SNP');
                 else if (typeFilter === 'i-snp') matchesType = plan.Name.includes('I-SNP');
                 else if (typeFilter === 'standard') matchesType = !plan.Name.includes('SNP'); 
 
-                // 4. Star Ratings (Converting strings like "4.5" to numbers)
                 let matchesStars = true;
                 if (starFilter === '4') {
                     const rating = parseFloat(plan['Star rating']);
                     matchesStars = !isNaN(rating) && rating >= 4;
                 }
 
-                // 5. Drug Coverage (Checking our extracted data for the exclusion phrase)
                 let matchesDrugs = true;
                 const noDrugs = plan.drug_deductible === "No Part D drug coverage" || plan.drug_deductible === "Drugs covered separately";
                 
@@ -372,7 +363,6 @@
             renderPlans(filteredPlans);
         }
 
-        // Attach event listeners to all dropdowns and inputs
         document.getElementById('search').addEventListener('input', applyFilters);
         document.getElementById('filter-county').addEventListener('change', applyFilters);
         document.getElementById('filter-type').addEventListener('change', applyFilters);
