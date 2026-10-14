@@ -3,86 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2027 Medicare Advantage Plans</title>
+    <title>2027 South Florida Medicare Advantage Plans</title>
+    
+    <!-- Pym.js Resizer for iFrame Embeds -->
+    <script src="https://pym.nprapps.org/pym.v1.min.js"></script>
+
     <style>
         :root {
-            --text-main: #111111;
-            --text-muted: #444444;
-            --bg-page: #f9f9f9;
-            --bg-card: #ffffff;
-            --border: #cccccc;
+            /* Restoring the accent colors for better navigation */
             --accent: #0056b3;
             --accent-hover: #003d82;
         }
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-page);
+        /* --- Datawrapper-Inspired Newsroom Theme --- */
+        body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            font-size: 16px;
-            line-height: 1.5;
-            color: var(--text-main);
-            /* Enables smooth momentum scrolling inside fixed WordPress iframes on mobile */
+            color: #333333;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 10px;
             -webkit-overflow-scrolling: touch; 
         }
 
-        body {
-            padding: 1rem;
+        .table-container {
+            max-width: 100%;
+            margin: 0 auto;
         }
 
-        /* Sticky Control Bar for Fixed-Height Iframes */
-        .controls {
+        /* Journalistic Copy Header Styles */
+        .chart-header {
+            margin-bottom: 22px;
+        }
+
+        .chart-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111111;
+            margin: 0 0 6px 0;
+            line-height: 1.2;
+        }
+
+        .chart-intro {
+            font-size: 14px;
+            color: #555555;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Custom Dropdown Filters Toolbar (Adapted for sticky iframe use) */
+        .custom-filter-toolbar {
             display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            background: var(--bg-card);
-            padding: 1.25rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            
-            /* Pin filters to top when scrolling inside iframe */
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ebeeec;
             position: sticky;
             top: 0;
+            background-color: #ffffff;
             z-index: 1000;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            padding-top: 10px;
         }
 
-        .control-group {
+        .filter-group {
             display: flex;
-            flex-direction: column;
-            flex: 1 1 180px;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #555555;
+            font-weight: 600;
         }
 
-        .control-group label {
-            font-weight: bold;
-            font-size: 0.9rem;
-            margin-bottom: 0.4rem;
-        }
-
-        .control-group select, .control-group input {
-            padding: 0.65rem;
-            font-size: 16px;
-            border: 1px solid var(--border);
+        .filter-group select, .filter-group input {
+            border: 1px solid #cccccc;
             border-radius: 4px;
-            background: #fff;
+            padding: 6px 10px;
+            font-size: 13px;
+            background-color: #ffffff;
+            color: #333333;
+            outline: none;
+            transition: border-color 0.15s ease-in-out;
         }
 
-        /* Accessibility Focus States */
-        button:focus-visible, 
-        select:focus-visible, 
-        input:focus-visible, 
-        a:focus-visible {
-            outline: 3px solid var(--accent);
-            outline-offset: 2px;
+        .filter-group input {
+            width: 200px;
         }
 
-        /* Card Layout */
+        .filter-group select:focus, .filter-group input:focus {
+            border-color: #888888;
+        }
+
+        /* Card Layout (Styled to match the newsroom table aesthetic) */
         #plan-container {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1.25rem;
+            gap: 15px;
+            margin-top: 10px;
+            margin-bottom: 15px;
         }
 
         @media (min-width: 768px) {
@@ -92,66 +109,68 @@
         }
 
         .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.25rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            padding: 15px;
+            background-color: #ffffff;
+            transition: background-color 0.15s;
+        }
+
+        .card:hover {
+            background-color: #f7f7f7;
         }
 
         .card-header {
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 2px solid var(--bg-page);
-        }
-
-        .plan-name {
-            font-size: 1.15rem;
-            font-weight: bold;
-            margin: 0 0 0.4rem 0;
-            color: var(--accent);
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #ebeeec;
         }
 
         .company-name {
-            font-size: 0.85rem;
+            font-size: 11px;
+            color: #666666;
+            letter-spacing: 0.02em;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
+            font-weight: 700;
+            margin: 0 0 4px 0;
+        }
+
+        .plan-name {
+            font-size: 16px;
+            font-weight: 700;
             margin: 0;
+            color: var(--accent); /* Restored Blue Accent */
+            line-height: 1.3;
         }
 
         .key-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .stat {
-            background: var(--bg-page);
-            padding: 0.6rem;
-            border-radius: 4px;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
         .stat-label {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            color: #555555;
             display: block;
-            margin-bottom: 0.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
         }
 
         .stat-value {
-            font-size: 1rem;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 700;
+            color: #111111;
         }
 
         /* Expandable Details */
         .details-content {
             display: none;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border);
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #cccccc;
         }
 
         .details-content.active {
@@ -162,70 +181,126 @@
             list-style: none;
             padding: 0;
             margin: 0;
+            font-size: 13.5px;
         }
 
         .details-list li {
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px dashed #eee;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ebeeec;
         }
 
         .details-list li:last-child {
             border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
         .details-list strong {
             display: block;
-            color: var(--text-muted);
-            font-size: 0.85rem;
+            color: #555555;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 2px;
         }
 
         .toggle-btn {
             width: 100%;
-            padding: 0.85rem;
-            background: var(--accent);
-            color: white;
+            padding: 8px 12px;
+            background-color: var(--accent); /* Restored Blue Accent */
+            color: #ffffff;
             border: none;
             border-radius: 4px;
-            font-size: 0.95rem;
-            font-weight: bold;
+            font-size: 12.5px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background-color 0.2s;
         }
 
         .toggle-btn:hover {
-            background: var(--accent-hover);
+            background-color: var(--accent-hover);
         }
 
         .card-footer {
-            margin-top: 1.25rem;
-            text-align: center;
+            margin-top: 15px;
+            text-align: left;
         }
 
         .card-footer a {
-            color: var(--accent);
+            color: var(--accent); /* Restored Blue Accent */
             text-decoration: none;
-            font-weight: bold;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .card-footer a:hover {
+            text-decoration: underline;
+            color: var(--accent-hover);
+        }
+
+        /* Source Footnote Styles */
+        .chart-footer {
+            margin-top: 20px;
+            padding-top: 12px;
+            border-top: 1px solid #ebeeec;
+        }
+
+        .chart-source {
+            font-size: 11px;
+            color: #666666;
+            letter-spacing: 0.02em;
+            margin: 0;
+        }
+
+        /* Accessibility Focus */
+        button:focus-visible, 
+        select:focus-visible, 
+        input:focus-visible, 
+        a:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Mobile Breakpoints */
+        @media (max-width: 640px) {
+            .custom-filter-toolbar {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .filter-group {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .filter-group select, .filter-group input {
+                width: 65%;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="controls">
-        <div class="control-group">
-            <label for="search">Search Plans</label>
+<div class="table-container">
+    <header class="chart-header">
+        <h1 class="chart-title">2027 South Florida Medicare Advantage Plans</h1>
+        <p class="chart-intro">Search and filter Medicare Advantage options across Palm Beach and Broward counties to compare costs, coverage, and ratings.</p>
+    </header>
+
+    <div class="custom-filter-toolbar">
+        <div class="filter-group">
+            <label for="search">Search:</label>
             <input type="text" id="search" placeholder="e.g., Aetna, CarePlus...">
         </div>
-        <div class="control-group">
-            <label for="filter-county">County</label>
+        <div class="filter-group">
+            <label for="filter-county">County:</label>
             <select id="filter-county">
                 <option value="all">All Counties</option>
                 <option value="Broward">Broward</option>
                 <option value="Palm Beach">Palm Beach</option>
             </select>
         </div>
-        <div class="control-group">
-            <label for="filter-type">Plan Type</label>
+        <div class="filter-group">
+            <label for="filter-type">Plan Type:</label>
             <select id="filter-type">
                 <option value="all">All Plan Types</option>
                 <option value="standard">Standard Plans (No SNP)</option>
@@ -234,18 +309,18 @@
                 <option value="i-snp">Institutional (I-SNP)</option>
             </select>
         </div>
-        <div class="control-group">
-            <label for="filter-stars">Star Rating</label>
+        <div class="filter-group">
+            <label for="filter-stars">Rating:</label>
             <select id="filter-stars">
                 <option value="all">All Ratings</option>
                 <option value="4">4 Stars & Above</option>
             </select>
         </div>
-        <div class="control-group">
-            <label for="filter-drugs">Drug Coverage</label>
+        <div class="filter-group">
+            <label for="filter-drugs">Drugs:</label>
             <select id="filter-drugs">
                 <option value="all">All Plans</option>
-                <option value="included">Includes Part D (Drugs)</option>
+                <option value="included">Includes Part D</option>
                 <option value="none">No Drug Coverage</option>
             </select>
         </div>
@@ -253,121 +328,131 @@
 
     <div id="plan-container"></div>
 
-    <script>
-        let allPlans = [];
+    <footer class="chart-footer">
+        <p class="chart-source">SOURCE: Medicare.gov and health plan providers.</p>
+    </footer>
+</div>
 
-        fetch('medicare_cleaned.json')
-            .then(response => response.json())
-            .then(data => {
-                allPlans = data;
-                renderPlans(allPlans);
-            })
-            .catch(error => console.error("Error loading JSON:", error));
+<script>
+    const pymChild = new pym.Child({ polling: 500 });
+    let allPlans = [];
 
-        function renderPlans(plans) {
-            const container = document.getElementById('plan-container');
-            container.innerHTML = '';
+    fetch('medicare_cleaned.json')
+        .then(response => response.json())
+        .then(data => {
+            allPlans = data;
+            renderPlans(allPlans);
+        })
+        .catch(error => console.error("Error loading JSON:", error));
 
-            if (plans.length === 0) {
-                container.innerHTML = '<p>No plans match your selected filters. Try adjusting your search.</p>';
-                return;
+    function renderPlans(plans) {
+        const container = document.getElementById('plan-container');
+        container.innerHTML = '';
+
+        if (plans.length === 0) {
+            container.innerHTML = '<p style="font-size: 14px; color: #555555;">No plans match your selected filters. Try adjusting your search.</p>';
+            pymChild.sendHeight();
+            return;
+        }
+
+        plans.forEach((plan, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <p class="company-name">${plan.Companies}</p>
+                    <h2 class="plan-name">${plan.Name}</h2>
+                </div>
+                
+                <div class="key-stats">
+                    <div class="stat">
+                        <span class="stat-label">Monthly Premium</span>
+                        <span class="stat-value">${plan['Monthly premium'].split('.')[0]}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Star Rating</span>
+                        <span class="stat-value">⭐ ${plan['Star rating']}</span>
+                    </div>
+                </div>
+
+                <button class="toggle-btn" onclick="toggleDetails('details-${index}')">View details</button>
+
+                <div id="details-${index}" class="details-content">
+                    <ul class="details-list">
+                        <li><strong>Primary Doctor Copay</strong> ${plan.primary_doctor}</li>
+                        <li><strong>Specialist Copay</strong> ${plan.specialist}</li>
+                        <li><strong>Max Out-of-Pocket</strong> ${plan.max_out_of_pocket}</li>
+                        <li><strong>Hospital Stay</strong> ${plan.inpatient_hospital}</li>
+                        <li><strong>Dental Coverage</strong> ${plan.dental_coverage}</li>
+                        <li><strong>Drug Deductible</strong> ${plan.drug_deductible}</li>
+                        <li><strong>Preferred Pharmacies</strong> ${plan.preferred_pharmacies}</li>
+                    </ul>
+                    <div class="card-footer">
+                        <a href="https://${plan.Website}" target="_blank" rel="noopener noreferrer">Visit Plan Website &rarr;</a>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        pymChild.sendHeight();
+    }
+
+    window.toggleDetails = function(id) {
+        const details = document.getElementById(id);
+        details.classList.toggle('active');
+        pymChild.sendHeight();
+    }
+
+    function applyFilters() {
+        const searchTerm = document.getElementById('search').value.toLowerCase();
+        const countyFilter = document.getElementById('filter-county').value;
+        const typeFilter = document.getElementById('filter-type').value;
+        const starFilter = document.getElementById('filter-stars').value;
+        const drugFilter = document.getElementById('filter-drugs').value;
+
+        const filteredPlans = allPlans.filter(plan => {
+            const matchesSearch = plan.Name.toLowerCase().includes(searchTerm) || 
+                                  plan.Companies.toLowerCase().includes(searchTerm);
+            
+            let matchesCounty = true;
+            if (countyFilter !== 'all') {
+                matchesCounty = plan.Name.includes(countyFilter);
             }
 
-            plans.forEach((plan, index) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                
-                card.innerHTML = `
-                    <div class="card-header">
-                        <p class="company-name">${plan.Companies}</p>
-                        <h2 class="plan-name">${plan.Name}</h2>
-                    </div>
-                    
-                    <div class="key-stats">
-                        <div class="stat">
-                            <span class="stat-label">Monthly Premium</span>
-                            <span class="stat-value">${plan['Monthly premium'].split('.')[0]}</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Star Rating</span>
-                            <span class="stat-value">⭐ ${plan['Star rating']}</span>
-                        </div>
-                    </div>
+            let matchesType = true;
+            if (typeFilter === 'd-snp') matchesType = plan.Name.includes('D-SNP');
+            else if (typeFilter === 'c-snp') matchesType = plan.Name.includes('C-SNP');
+            else if (typeFilter === 'i-snp') matchesType = plan.Name.includes('I-SNP');
+            else if (typeFilter === 'standard') matchesType = !plan.Name.includes('SNP'); 
 
-                    <button class="toggle-btn" onclick="toggleDetails('details-${index}')">View Full Costs & Details</button>
+            let matchesStars = true;
+            if (starFilter === '4') {
+                const rating = parseFloat(plan['Star rating']);
+                matchesStars = !isNaN(rating) && rating >= 4;
+            }
 
-                    <div id="details-${index}" class="details-content">
-                        <ul class="details-list">
-                            <li><strong>Primary Doctor Copay</strong> ${plan.primary_doctor}</li>
-                            <li><strong>Specialist Copay</strong> ${plan.specialist}</li>
-                            <li><strong>Max Out-of-Pocket</strong> ${plan.max_out_of_pocket}</li>
-                            <li><strong>Hospital Stay</strong> ${plan.inpatient_hospital}</li>
-                            <li><strong>Dental Coverage</strong> ${plan.dental_coverage}</li>
-                            <li><strong>Drug Deductible</strong> ${plan.drug_deductible}</li>
-                            <li><strong>Preferred Pharmacies</strong> ${plan.preferred_pharmacies}</li>
-                        </ul>
-                        <div class="card-footer">
-                            <a href="https://${plan.Website}" target="_blank" rel="noopener noreferrer">Visit Plan Website &rarr;</a>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
+            let matchesDrugs = true;
+            const noDrugs = plan.drug_deductible === "No Part D drug coverage" || plan.drug_deductible === "Drugs covered separately";
+            
+            if (drugFilter === 'included') {
+                matchesDrugs = !noDrugs;
+            } else if (drugFilter === 'none') {
+                matchesDrugs = noDrugs;
+            }
 
-        window.toggleDetails = function(id) {
-            const details = document.getElementById(id);
-            details.classList.toggle('active');
-        }
+            return matchesSearch && matchesCounty && matchesType && matchesStars && matchesDrugs;
+        });
 
-        function applyFilters() {
-            const searchTerm = document.getElementById('search').value.toLowerCase();
-            const countyFilter = document.getElementById('filter-county').value;
-            const typeFilter = document.getElementById('filter-type').value;
-            const starFilter = document.getElementById('filter-stars').value;
-            const drugFilter = document.getElementById('filter-drugs').value;
+        renderPlans(filteredPlans);
+    }
 
-            const filteredPlans = allPlans.filter(plan => {
-                const matchesSearch = plan.Name.toLowerCase().includes(searchTerm) || 
-                                      plan.Companies.toLowerCase().includes(searchTerm);
-                
-                let matchesCounty = true;
-                if (countyFilter !== 'all') {
-                    matchesCounty = plan.Name.includes(countyFilter);
-                }
-
-                let matchesType = true;
-                if (typeFilter === 'd-snp') matchesType = plan.Name.includes('D-SNP');
-                else if (typeFilter === 'c-snp') matchesType = plan.Name.includes('C-SNP');
-                else if (typeFilter === 'i-snp') matchesType = plan.Name.includes('I-SNP');
-                else if (typeFilter === 'standard') matchesType = !plan.Name.includes('SNP'); 
-
-                let matchesStars = true;
-                if (starFilter === '4') {
-                    const rating = parseFloat(plan['Star rating']);
-                    matchesStars = !isNaN(rating) && rating >= 4;
-                }
-
-                let matchesDrugs = true;
-                const noDrugs = plan.drug_deductible === "No Part D drug coverage" || plan.drug_deductible === "Drugs covered separately";
-                
-                if (drugFilter === 'included') {
-                    matchesDrugs = !noDrugs;
-                } else if (drugFilter === 'none') {
-                    matchesDrugs = noDrugs;
-                }
-
-                return matchesSearch && matchesCounty && matchesType && matchesStars && matchesDrugs;
-            });
-
-            renderPlans(filteredPlans);
-        }
-
-        document.getElementById('search').addEventListener('input', applyFilters);
-        document.getElementById('filter-county').addEventListener('change', applyFilters);
-        document.getElementById('filter-type').addEventListener('change', applyFilters);
-        document.getElementById('filter-stars').addEventListener('change', applyFilters);
-        document.getElementById('filter-drugs').addEventListener('change', applyFilters);
-    </script>
+    document.getElementById('search').addEventListener('input', applyFilters);
+    document.getElementById('filter-county').addEventListener('change', applyFilters);
+    document.getElementById('filter-type').addEventListener('change', applyFilters);
+    document.getElementById('filter-stars').addEventListener('change', applyFilters);
+    document.getElementById('filter-drugs').addEventListener('change', applyFilters);
+</script>
 </body>
 </html>
